@@ -7,6 +7,7 @@ function ex2
 %  min  0.5 * z' * prob.H * z + prob.q' * z
 %  s.t. prob.G * z <= prob.d
 
+
 steps_list = [];
 mu_list = [];
 for mu = logspace(-3,-0.1,50)
