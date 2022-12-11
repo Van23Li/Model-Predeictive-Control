@@ -36,12 +36,12 @@ classdef MpcControl_roll < MpcControlBase
            A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
-            Q = N * eye(nx);
+            Q = 10 * eye(nx);
             R = eye(nu);
             us = 0;
             umax = 20 - us;
             umin = -20 - us;
-            xmax = [inf; pi];
+            xmax = [inf; inf];
             xmin = -xmax;
             sys.x.penalty = QuadFunction(Q); 
             sys.u.penalty = QuadFunction(R);
@@ -58,9 +58,9 @@ classdef MpcControl_roll < MpcControlBase
             sys.x.terminalSet = Xf;
             % Constraints
             % u in U = { u | Mu <= m }
-            M = [eye(nu);-eye(nu)]; m = [umax; umax];
+            M = [eye(nu);-eye(nu)]; m = [umax; -umin];
             % x in X = { x | Fx <= f }
-            F = [eye(nx); -eye(nx)]; f = [xmax;xmax];
+            F = [eye(nx); -eye(nx)]; f = [xmax;-xmin];
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
             obj = U(:,1)'*R*U(:,1);
             for i = 2:N-1
