@@ -36,8 +36,8 @@ classdef MpcControl_y < MpcControlBase
             A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
-            Q = diag([40,10,1,20]);
-            R = eye(nu)*0.1;
+            Q = diag([40,10,10,60]);
+            R = eye(nu)*0.01;
             us = 0;
             umax = deg2rad(15) - us;
             umin = -umax - us;

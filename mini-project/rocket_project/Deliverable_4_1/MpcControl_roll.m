@@ -36,8 +36,8 @@ classdef MpcControl_roll < MpcControlBase
             A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
-            Q = diag([1, 20]);
-            R = eye(nu)*0.1;
+            Q = diag([40, 60]);
+            R = eye(nu)*0.01;
             us = 0;
             umax = 20 - us;
             umin = -20 - us;

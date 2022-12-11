@@ -50,8 +50,8 @@ classdef MpcControl_z < MpcControlBase
             A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
-            Q = diag([1,20]);
-            R = eye(nu)*0.1;
+            Q = diag([50,60]);
+            R = eye(nu)*0.01;
             us = 56.6667;
             % u* = u - us
             umax = 80 - us;
