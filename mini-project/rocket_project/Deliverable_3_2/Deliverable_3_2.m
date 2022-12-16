@@ -33,4 +33,4 @@ ph_z = rocket.plotvis_sub(T, Z_sub, U_sub, sys_z, xs, us, z_ref);
 mpc_r = MpcControl_roll(sys_roll, Ts, H);
 r_ref = deg2rad(35);  
 [T, R_sub, U_sub] = rocket.simulate_f(sys_roll, x0(x_indexes_list{4}), Tf, @mpc_r.get_u, r_ref);
-ph_r = rocket.plotvis_sub(T, R_sub, U_sub, sys_roll, xs, us);
+ph_r = rocket.plotvis_sub(T, R_sub, U_sub, sys_roll, xs, us, r_ref);

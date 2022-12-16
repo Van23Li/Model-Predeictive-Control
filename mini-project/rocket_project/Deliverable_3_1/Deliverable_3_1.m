@@ -37,7 +37,7 @@ sgtitle("Controller of Y-closedloop");
 mpc_z = MpcControl_z(sys_z, Ts, H);
 [uz, T_optz, X_optz, U_optz] = mpc_z.get_u(x0(x_indexes_list{3}));
 U_optz(:,end+1) = nan;
-phz = rocket.plotvis_sub(T_optz, X_optz, U_optz, sys_z, xs, us); % Plot as usual
+phz = rocket.plotvis_sub(T_optz, X_optz, U_optz+us(3,:), sys_z, xs, us); % Plot as usual
 sgtitle("Controller of Z-openloop");
 [Tz, Z_subz, U_subz] = rocket.simulate_f(sys_z, x0(x_indexes_list{3}), Tf, @mpc_z.get_u, 0);
 ph_z = rocket.plotvis_sub(Tz, Z_subz, U_subz, sys_z, xs, us);
