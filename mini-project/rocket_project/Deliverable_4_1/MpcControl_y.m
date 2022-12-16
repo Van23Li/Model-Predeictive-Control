@@ -33,11 +33,12 @@ classdef MpcControl_y < MpcControlBase
             %       the DISCRETE-TIME MODEL of your system
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
+            epsi = sdpvar(nx, N-1);
             A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
-            Q = diag([40,10,10,60]);
-            R = eye(nu)*0.01;
+            Q = diag([25,10,10,70]);
+            R = eye(nu)*0.001;
             us = 0;
             umax = deg2rad(15) - us;
             umin = -umax - us;
@@ -60,13 +61,15 @@ classdef MpcControl_y < MpcControlBase
             % u in U = { u | Mu <= m }
             M = [eye(nu);-eye(nu)]; m = [umax; umax];
             % x in X = { x | Fx <= f }
-            F = [eye(nx); -eye(nx)]; f = [xmax;xmax];
+%             F = [eye(nx); -eye(nx)]; f = [xmax;xmax];
+            S = eye(nx)*5;
             con = (X(:,2)-x_ref == A*(X(:,1)-x_ref) + B*(U(:,1)-u_ref)) + (M*U(:,1) <= m);
             obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
             for i = 2:N-1
+                F = [eye(nx); -eye(nx)]; f = [xmax;xmax]+[epsi(:,i);epsi(:,i)];
                 con = con + (X(:,i+1)-x_ref == A*(X(:,i)-x_ref) + B*(U(:,i)-u_ref));
                 con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
-                obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
+                obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref) + epsi(:,i)'*S*epsi(:,i)+5*norm(epsi(:,i), 1);
             end
 %             con = con + (Xf.A*X(:,N) <= Xf.b);
             obj = obj + (X(:,N)-x_ref)'*Qf*(X(:,N)-x_ref);

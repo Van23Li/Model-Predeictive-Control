@@ -31,6 +31,6 @@ ref = @(t_, x_) ref_EPFL(t_);
 Tf = 30;
 [T, X, U, Ref] = rocket.simulate(x0, Tf, @mpc.get_u, ref);
 % Visualize
-rocket.anim_rate = 5; % Increase this to make the animation faster
+rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
 ph.fig.Name = 'Merged lin. MPC in nonlinear simulation'; % Set a figure title
