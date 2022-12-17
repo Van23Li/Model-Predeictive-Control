@@ -21,14 +21,11 @@ mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
 Tf = 30;
 x0 = zeros(12,1);
 ref = @(t_, x_) ref_EPFL(t_);
-rocket.mass = 2; % Manipulate mass for simulation
+% rocket.mass = 1.8; % Manipulate mass for simulation
+rocket.mass = 2.0; % Manipulate mass for simulation
 [T, X, U, Ref] = rocket.simulate(x0, Tf, @mpc.get_u, ref);
 %%
 rocket.anim_rate = 10; % Increase this to make the animation faster
-ph = rocket.plotvis(T, X, U, Ref);
-ph.fig.Name = 'Merged lin. MPC in nonlinear simulation'; % Set a figure title
-mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
-[T, X, U, Ref] = rocket.simulate(x0, Tf, @mpc.get_u, ref);
 ph = rocket.plotvis(T, X, U, Ref);
 ph.fig.Name = 'Merged lin. MPC in nonlinear simulation'; % Set a figure title
 %%
@@ -36,3 +33,5 @@ ph.fig.Name = 'Merged lin. MPC in nonlinear simulation'; % Set a figure title
 rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
 ph.fig.Name = 'Merged lin. MPC in nonlinear simulation_est_z'; % Set a figure title
+% %%
+% plot(Z_hat(end,11:end));

@@ -140,7 +140,7 @@ classdef MpcControl_z < MpcControlBase
             f = [xmax; xmax];
             M = [1; -1];
             m = [umax; -umin];
-            con = [xs == A*xs + B*us + B*d_est, ref == C*xs + D*us + D*d_est, F*xs <= f, M*us <= m];
+            con = [xs == A*xs + B*us + B*d_est, ref == C*xs + D*us, F*xs <= f, M*us <= m];
             obj = us'*us;  
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
