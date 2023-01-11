@@ -99,7 +99,7 @@ classdef MpcControl_z < MpcControlBase
             
             % Return YALMIP optimizer object
             ctrl_opti = optimizer(con, obj, sdpsettings('solver','gurobi'), ...
-                {X(:,1), x_ref, u_ref, d_est}, {U(:,1), X, U});
+                {X(:,1), x_ref, u_ref, d_est}, {U(:,1), X, U, epsi});
         end
         
         
