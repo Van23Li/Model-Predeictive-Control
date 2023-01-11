@@ -63,7 +63,7 @@ classdef MpcControl_y < MpcControlBase
             % x in X = { x | Fx <= f }
 %             F = [eye(nx); -eye(nx)]; f = [xmax;xmax];
             S = eye(nx)*5;
-            con = (X(:,2)-x_ref == A*(X(:,1)-x_ref) + B*(U(:,1)-u_ref)) + (M*U(:,1) <= m);
+            con = (X(:,2)-x_ref == A*(X(:,1)-x_ref) + B*(U(:,1)-u_ref)) + (M*U(:,1) <= m) + (-epsi(:,1)<=0);
             obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
             for i = 2:N-1
                 F = [eye(nx); -eye(nx)]; f = [xmax;xmax]+[epsi(:,i);epsi(:,i)];
