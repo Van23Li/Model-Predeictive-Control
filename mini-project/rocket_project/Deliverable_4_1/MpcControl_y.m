@@ -68,7 +68,7 @@ classdef MpcControl_y < MpcControlBase
             for i = 2:N-1
                 F = [eye(nx); -eye(nx)]; f = [xmax;xmax]+[epsi(:,i);epsi(:,i)];
                 con = con + (X(:,i+1)-x_ref == A*(X(:,i)-x_ref) + B*(U(:,i)-u_ref));
-                con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
+                con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m) + (-epsi(:,i)<=0);
                 obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref) + epsi(:,i)'*S*epsi(:,i)+5*norm(epsi(:,i), 1);
             end
 %             con = con + (Xf.A*X(:,N) <= Xf.b);
