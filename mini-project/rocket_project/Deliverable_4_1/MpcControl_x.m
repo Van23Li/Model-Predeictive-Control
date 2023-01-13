@@ -34,7 +34,7 @@ classdef MpcControl_x < MpcControlBase
             %       the DISCRETE-TIME MODEL of your system
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            epsi = sdpvar(nx, N-1);
+            epsi = sdpvar(nx, N);
             A = mpc.A;
             B = mpc.B;
             sys = LTISystem('A',A,'B',B);
@@ -65,7 +65,7 @@ classdef MpcControl_x < MpcControlBase
 %             F = [eye(nx); -eye(nx)]; f = [xmax;xmax];
             S = eye(nx)*5;
             con = (X(:,2)-x_ref == A*(X(:,1)-x_ref) + B*(U(:,1)-u_ref)) + (M*U(:,1) <= m) + (-epsi(:,1)<=0);
-            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
+            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref)+ epsi(:,1)'*S*epsi(:,1)+5*norm(epsi(:,1), 1);
             for i = 2:N-1
                 F = [eye(nx); -eye(nx)]; f = [xmax;xmax]+[epsi(:,i);epsi(:,i)];
                 con = con + (X(:,i+1)-x_ref == A*(X(:,i)-x_ref) + B*(U(:,i)-u_ref));
@@ -73,8 +73,8 @@ classdef MpcControl_x < MpcControlBase
                 obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref) + epsi(:,i)'*S*epsi(:,i)+5*norm(epsi(:,i), 1);
 %                 obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
             end
-%             con = con + (Xf.A*X(:,N) <= Xf.b);
-            obj = obj + (X(:,N)-x_ref)'*Qf*(X(:,N)-x_ref);
+            con = con + (-epsi(:,N)<=0);
+            obj = obj + (X(:,N)-x_ref)'*Qf*(X(:,N)-x_ref)+ epsi(:,N)'*S*epsi(:,N)+5*norm(epsi(:,N), 1);
 %             %Plot terminal set
 %             figure;
 %             Xf.projection(1:2).plot();
