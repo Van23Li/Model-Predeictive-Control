@@ -78,8 +78,8 @@ classdef NmpcControl < handle
             % Xs, Us
 %             Xs  = SX.sym('Xs', nx, 1);  % steady state
 %             Us  = SX.sym('Us', nu, 1);  % steady state
-            Xs = [xs(1:5); ref_sym(4); xs(7:9); ref_sym(1:3)];
-            Us = us;
+            X_ref = [xs(1:5); ref_sym(4); xs(7:9); ref_sym(1:3)];
+            U_ref = us;
             
             %cost
             cost = 0;
@@ -87,8 +87,8 @@ classdef NmpcControl < handle
 %             eq_constr = [];
             ineq_constr = [];
             for i = 1:N-1
-                cost = cost + (X_sym(:,i)-Xs)' * Q * (X_sym(:,i)-Xs)...
-                + (U_sym(:, i)-Us)' * R * (U_sym(:, i)-Us);
+                cost = cost + (X_sym(:,i)-X_ref)' * Q * (X_sym(:,i)-X_ref)...
+                + (U_sym(:, i)-U_ref)' * R * (U_sym(:, i)-U_ref);
                 eq_constr = [eq_constr ; (X_sym(:, i+1) - f_dis(X_sym(:, i), U_sym(:,i)))];
                 ineq_constr = [ineq_constr; X_sym(5,i) - ubx(5, 1) ; -(X_sym(5,i) - lbx(5, 1)); U_sym(:,i) - ubu ; -(U_sym(:,i) - lbu)];
             end
